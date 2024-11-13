@@ -8,6 +8,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import ToDoSerializer
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 from .models import ToDo
 
 
@@ -16,18 +18,35 @@ from .models import ToDo
 class ListTodo(generics.ListAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
+    permission_classes = [IsAuthenticated] 
+
+    def get_queryset(self):
+        return ToDo.objects.filter(user=self.request.user)
+
 
 class DetailTodo(generics.RetrieveUpdateAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
+    permission_classes = [IsAuthenticated] 
+
+    def get_queryset(self):
+        return ToDo.objects.filter(user=self.request.user)
 
 class CreateTodo(generics.CreateAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
+    permission_classes = [IsAuthenticated] 
+
+    def get_queryset(self):
+        return ToDo.objects.filter(user=self.request.user)
 
 class DeleteTodo(generics.DestroyAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
+    permission_classes = [IsAuthenticated] 
+
+    def get_queryset(self):
+        return ToDo.objects.filter(user=self.request.user)
 
 
 class RegisterView(generics.CreateAPIView):
